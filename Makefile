@@ -1,44 +1,35 @@
-EXE=dem
+BIN=daemonizer
 CC=gcc
-CFLAGS=-Wall -Wextra -Werror -std=c99 -pedantic
-SRC=src/tools.c src/manage.c src/demonize.c src/main.c
+CFLAGS=-Wall -Wextra -Werror -std=c99 -pedantic -Iinclude/
+SRC=src/helper.c src/manage.c src/daemonize.c src/main.c
 OBJ=$(SRC:.c=.o)
-TAR=demonizer
+TAR=yrakcaz-$(BIN)
 PREFIX=/usr/local
-CP=cp
 
 -include makefile.rules
 
-all: $(EXE)
+all: $(BIN)
 
-$(EXE): $(OBJ)
-	$(CC) $(CFLAGS) -o $(EXE) $^
+$(BIN): $(OBJ)
+	$(CC) $(CFLAGS) -o $(BIN) $^
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 clean:
-	$(RM) $(OBJ) $(EXE) $(TAR).tar.bz2
+	$(RM) $(OBJ) $(BIN) $(TAR).tar.bz2
 
-cleandoc:
-	$(RM) doc/html doc/latex doc/refman.pdf
-
-distclean: clean cleandoc
+distclean: clean
 	$(RM) makefile.rules
 
 export:
 	git archive HEAD --prefix=$(TAR)/ | bzip2 > $(TAR).tar.bz2
 
-doc:
-	doxygen doc/Doxyfile
-	$(MAKE) -C doc/latex
-	mv doc/latex/refman.pdf doc/
-
 install:
-	$(CP) $(EXE) $(PREFIX)/bin
+	cp $(BIN) $(PREFIX)/bin
 
 uninstall:
-	$(RM) $(PREFIX)/bin/$(EXE)
+	$(RM) $(PREFIX)/bin/$(BIN)
 
 
-.PHONY: all clean distclean export doc install uninstall
+.PHONY: all clean distclean export install uninstall

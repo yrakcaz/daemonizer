@@ -1,46 +1,28 @@
 #ifndef MANAGE_H
 # define MANAGE_H
 
-# include <stdlib.h>
-# include <unistd.h>
-# include <sys/types.h>
-# include <sys/stat.h>
-# include <stdio.h>
-# include <fcntl.h>
 # include <dirent.h>
+# include <fcntl.h>
+# include <stdio.h>
+# include <stdlib.h>
 # include <string.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <unistd.h>
 
-/**
-** @def DEAMONS_SIZE
-** @brief Maximum size of global array containing deamons indexes.
-*/
-# define DEAMONS_SIZE 4096
+// Maximum number of tracked daemons.
+# define DAEMONS_SIZE 4096
 
-/**
-** @var pid_t deamons[]
-** @brief Array of DEAMONS_SIZE pids containing deamons' pid at their index.
-*/
-pid_t deamons[DEAMONS_SIZE];
+// Global array mapping daemon index to PID.
+extern pid_t daemons[DAEMONS_SIZE];
 
-/**
-** @fn char *get_process_cmd(pid_t pid);
-** @brief Get the commandline of a process by looking into /proc.
-** @param pid Pid of the related process.
-** @return Returns the commandline.
-*/
+// Returns the command line of a process by reading /proc/<pid>/cmdline.
 char *get_process_cmd(pid_t pid);
 
-/**
-** @fn void get_deamons();
-** @brief Fills the deamons array.
-*/
-void get_deamons();
+// Populates the daemons array by scanning /proc for processes with PPID == 1.
+void get_daemons(void);
 
-/**
-** @fn void display_deamons();
-** @brief Displays the deamon list from deamons array.
-*/
-void display_deamons();
-
+// Displays the list of daemons with their index, PID, and command line.
+void display_daemons(void);
 
 #endif /* !MANAGE_H */

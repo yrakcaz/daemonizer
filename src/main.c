@@ -1,7 +1,7 @@
-#include "../include/demonize.h"
+#include <daemonize.h>
 
 int main(int argc, char **argv)
 {
-    treatment(argc, argv);
+    handle_options(argc, argv);
     return 0;
 }
