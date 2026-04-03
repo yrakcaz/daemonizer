@@ -1,4 +1,4 @@
-#include "../include/tools.h"
+#include <helper.h>
 
 void destroy_matrix(char **mat)
 {
